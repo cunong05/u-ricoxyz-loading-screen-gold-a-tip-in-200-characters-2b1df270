@@ -1,0 +1,1 @@
+Tip: the build is not stuck. It is thinking about all the code you wrote at 2 a.m. Go drink water. The compiler will still be judging you when you get back.
