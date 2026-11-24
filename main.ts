@@ -36,8 +36,7 @@ function verifyEntry(entry: string): void {
 
 verifyEntry(ENTRY);
 
-const root = dirname(fileURLToPath(import.meta.url));
-const outDir = join(root, "output");
+const outDir = "/output";
 const outFile = join(outDir, "entry.txt");
 
 mkdirSync(outDir, { recursive: true });
@@ -50,6 +49,13 @@ writeFileSync(outFile, ENTRY, "utf8");
 const readBack = readFileSync(outFile, "utf8");
 if (readBack !== ENTRY) {
   throw new Error("entry.txt does not match ENTRY after write");
+}
+
+// Byte-level read-back: the file must be exactly ENTRY's UTF-8 bytes,
+// so the sha256 of entry.txt matches the sha256 of ENTRY itself.
+const readBackBytes = readFileSync(outFile);
+if (!readBackBytes.equals(Buffer.from(ENTRY, "utf8"))) {
+  throw new Error("entry.txt bytes do not match ENTRY after write");
 }
 
 console.log(`Wrote ${outFile} (${ENTRY.length} characters)`);
